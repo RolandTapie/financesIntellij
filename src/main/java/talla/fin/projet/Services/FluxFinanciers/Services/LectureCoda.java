@@ -2,6 +2,7 @@ package talla.fin.projet.Services.FluxFinanciers.Services;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Coda;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Compte;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Solde;
@@ -11,16 +12,22 @@ import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class LectureCoda {
 
-    CompteRepository compteRepository;
+    public CompteRepository compteRepository;
+
     private int nbligne=0;
     private static List<Coda> liste= new ArrayList();
     private static List<Compte> listeCompte = new ArrayList();
+
+    public LectureCoda(CompteRepository compteRepository) {
+        this.compteRepository = compteRepository;
+    }
 
     public static List<Compte> getListeCompte() {
         return listeCompte;
@@ -69,7 +76,7 @@ public class LectureCoda {
 
             if ((files[i].getName().indexOf(".CD2") > 0) && i < files.length) //On teste s'il existe un fichier CODA
             {
-                ImportCoda();
+                ImportCoda(compteRepository);
                 break controle;
             }
 
@@ -77,8 +84,9 @@ public class LectureCoda {
 
     }
 
-    private  void ImportCoda()
+    private  void ImportCoda(CompteRepository compteRepository)
     {
+
 
         // TODO Auto-generated constructor stub
         System.out.println("Import des fichiers Coda");
@@ -206,10 +214,21 @@ public class LectureCoda {
 
                             //cod2.setCompte(compte);
                             Compte cpte= new Compte();
-                            cpte.setCompte(compte);
-                            compteRepository.save(cpte);
-                            cpte=compteRepository.findById(1).orElseThrow();
+                            List<Compte> compteList = new ArrayList();
+                            compteList=compteRepository.findByCompte(compte);
+                            Iterator<Compte>  compteIterator = compteList.iterator();
+                            if (compteIterator.hasNext())
+                            {
+                                cpte=compteIterator.next();
+                            }
+                            else
+                            {
+                                cpte.setCompte(compte);
+                                compteRepository.save(cpte);
+                            }
+
                             cod2.setCompte(cpte);
+                            solde.setCompte(cpte);
 
                             //cpte.setCompte(compte);
                             listeCompte.add(cpte);
@@ -217,7 +236,6 @@ public class LectureCoda {
                             cod2.setNumsequenceflux(nouvelleSequence);
                             cod2.setNumdetails(line.substring(6, 10));
                             cod2.setNumref(line.substring(11, 32));
-
 
 
                             if (line.substring(31, 32).equals("1"))
@@ -337,11 +355,11 @@ public class LectureCoda {
                     liste.add(cod2); // ajout du dernier flux
                     fr.close();  // On ferme le fichier
 
-//                    solde.setCompte(compte);
-//                    solde.setDate(datesolde);
-//                    solde.setSoldedebut(soldedebut);
-//                    solde.setSoldefin(soldefin);
-//                    listesolde.add(solde);
+
+                    solde.setDate(datesolde);
+                    solde.setSoldedebut(soldedebut);
+                    solde.setSoldefin(soldefin);
+                    listesolde.add(solde);
 
 
                 }
