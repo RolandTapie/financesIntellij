@@ -21,5 +21,6 @@ public class Banque implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nom;
-    private String Adresse;
+    private String adresse;
+    private String numentreprise;
 }

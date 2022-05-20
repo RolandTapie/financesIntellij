@@ -1,4 +1,4 @@
-package talla.fin.projet.Services.Dette.Interfaces;
+package talla.fin.projet.Services.Dette.Services;
 
 
 import lombok.AllArgsConstructor;
@@ -6,16 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.BeanUtils;
+import talla.fin.projet.Entities.Banques.Beans.Banque;
 import talla.fin.projet.Entities.Dette.Beans.Commun;
 import talla.fin.projet.Entities.Dette.Beans.Cout;
 import talla.fin.projet.Entities.Dette.Beans.Echeance;
 import talla.fin.projet.Entities.Dette.Beans.Signaletique;
+import talla.fin.projet.Repositories.Banques.BanqueRepository;
 
-import javax.persistence.Entity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Data
@@ -27,8 +29,13 @@ public class LireInventaireDette {
     List<Echeance> listeEch = new ArrayList<Echeance>();
     List<Commun> listeCom = new ArrayList<Commun>();
     List<Cout> listecout = new ArrayList<Cout>();
+    BanqueRepository banqueRepository;
 
-    public void lireInventaire() {
+    LireInventaireDette(BanqueRepository banqueRepositor)
+    {
+        this.banqueRepository=banqueRepositor;
+    }
+    public void execution(BanqueRepository banqueRepository) {
 
         LireInventaireDette liste = null;
         String chemin = "C:\\Users\\Liege\\Downloads\\Inventaire";
@@ -94,10 +101,33 @@ public class LireInventaireDette {
 
                                 //Utile pour sauvegar dans signaletique, echeance et cout
                                // sign.setIdcom(idcom);
-                                BeanUtils.copyProperties(sign, com);
-                                BeanUtils.copyProperties(ct, com);
-                                BeanUtils.copyProperties(ech, com);
-                                //ct.setIdcom(idcom);
+                                //System.out.println("Copie des propriétés");
+                                BeanUtils.copyProperties(com,sign);
+                                BeanUtils.copyProperties(com,ct);
+                                BeanUtils.copyProperties(com,ech);
+
+                                String nomBanque = com.getBanque();
+                                int idBanque;
+
+                                List<Banque> banques = banqueRepository.findByNom(nomBanque);
+                                Iterator<Banque> banqueIterator=banques.iterator();
+
+                                if (banqueIterator.hasNext())
+                                {
+                                    idBanque = banqueIterator.next().getId();
+                                }
+                                else
+                                {
+                                    Banque banque = new Banque();
+                                    banque.setNom(nomBanque);
+                                    banque.setAdresse("Adresse " + nomBanque);
+                                    banqueRepository.save(banque);
+                                    idBanque =banque.getId();
+                                }
+
+                                ech.setBanque(banqueRepository.findById(idBanque).orElseThrow());
+
+                                        //ct.setIdcom(idcom);
                                 //ech.setIdcom(idcom);
 
                                 Commun com1 = (Commun)com.clone();
@@ -132,7 +162,8 @@ public class LireInventaireDette {
                                 sign.setTypepret(line.substring(125,127));
                                 sign.setStatut(line.substring(127,128));
 
-                                Signaletique sign2=(Signaletique)sign.clone();
+                                Signaletique sign2= new Signaletique();
+                                BeanUtils.copyProperties(sign,sign2);
 
                                 listeSign.add(sign2);
 
@@ -162,8 +193,8 @@ public class LireInventaireDette {
                                 ct.setPerRev(line.substring(123,125));
                                 ct.setPlan(line.substring(125,126));
 
-                                Cout ct1=(Cout)ct.clone();
-
+                                Cout ct1 = new Cout();
+                                BeanUtils.copyProperties(ct,ct1);
                                 listecout.add(ct1);
 
                                 //System.out.println("Type5");
@@ -190,8 +221,8 @@ public class LireInventaireDette {
                                     ech.setMontant(Double.parseDouble(line.substring(45,59))/100);
                                     ech.setSdr(line.substring(59,74));
 
-                                    Echeance e1 = (Echeance)ech.clone();
-                                    //e1=ech;
+                                    Echeance e1 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e1);
                                     listeEch.add(e1);
 
                                     ech.setNumtranche("");
@@ -204,8 +235,8 @@ public class LireInventaireDette {
                                     ech.setMontant(Double.parseDouble(line.substring(85,100))/100);
                                     ech.setSdr(line.substring(100,115));
 
-                                    Echeance e2 = (Echeance)ech.clone();
-                                    //e2=ech;
+                                    Echeance e2 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e2);
                                     listeEch.add(e2);
 
 
@@ -223,8 +254,8 @@ public class LireInventaireDette {
                                     ech.setDateech(line.substring(33,41));
                                     ech.setMontant(Double.parseDouble(line.substring(41,56))/100);
 
-                                    Echeance e1 = (Echeance)ech.clone();
-                                    //e1=ech;
+                                    Echeance e1 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e1);
                                     listeEch.add(e1);
 
                                     ech.setNumtranche("");
@@ -234,8 +265,8 @@ public class LireInventaireDette {
 
                                     ech.setDateech(line.substring(56,64));
                                     ech.setMontant(Double.parseDouble(line.substring(64,79))/100);
-                                    Echeance e2 = (Echeance)ech.clone();
-                                    //e2=ech;
+                                    Echeance e2 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e2);
                                     listeEch.add(e2);
 
                                     ech.setNumtranche("");
@@ -246,8 +277,8 @@ public class LireInventaireDette {
                                     ech.setDateech(line.substring(79,87));
                                     ech.setMontant(Double.parseDouble(line.substring(87,102))/100);
 
-                                    Echeance e3 = (Echeance)ech.clone();
-                                    //e3=ech;
+                                    Echeance e3 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e3);
                                     listeEch.add(e3);
 
                                     ech.setNumtranche("");
@@ -257,8 +288,8 @@ public class LireInventaireDette {
 
                                     ech.setDateech(line.substring(102,110));
                                     ech.setMontant(Double.parseDouble(line.substring(110,125))/100);
-                                    Echeance e4 = (Echeance)ech.clone();
-                                    //e4=ech;
+                                    Echeance e4 = new Echeance();
+                                    BeanUtils.copyProperties(ech,e4);
                                     listeEch.add(e4);
 
                                     ech.setNumtranche("");
