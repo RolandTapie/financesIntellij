@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class LectureXML {
-    public static void execution() throws SAXException, IOException {
+    public static String Execution() throws SAXException, IOException {
 
         XMLReader xr= XMLReaderFactory.createXMLReader();
         MySAXApp handler = new MySAXApp();
@@ -42,6 +42,8 @@ public class LectureXML {
         }
 
         System.out.println("Nombre de fichiers traités :" + nbFichier);
+
+        return "Import OK";
     }
 
 }

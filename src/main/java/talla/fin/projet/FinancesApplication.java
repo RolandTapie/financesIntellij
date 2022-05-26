@@ -70,7 +70,8 @@ public class FinancesApplication {
 			});
 
 			System.out.println("Lecture XML");
-			LectureXML.execution();
+			String lecture="";
+			lecture = LectureXML.Execution();
 			System.out.println("Initialisation terminée");
 		};
 	}
