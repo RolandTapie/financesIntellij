@@ -15,6 +15,7 @@ import talla.fin.projet.Repositories.FluxFinanciers.CompteRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.SoldeRepository;
 import talla.fin.projet.Services.Dette.Services.LireInventaireDette;
 import talla.fin.projet.Services.FluxFinanciers.Services.LectureCoda;
+import talla.fin.projet.Services.Imports.XML.LectureXML;
 
 @SpringBootApplication
 public class FinancesApplication {
@@ -68,6 +69,8 @@ public class FinancesApplication {
 				coutRepository.save(cout);
 			});
 
+			System.out.println("Lecture XML");
+			LectureXML.execution();
 			System.out.println("Initialisation terminée");
 		};
 	}
