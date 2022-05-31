@@ -27,4 +27,61 @@ public class Article {
     @ManyToOne
     private Departement departement;
     private String autres="";
+
+
+    public static class Builder
+    {
+            public Builder()
+            {
+
+            }
+
+            Article article = new Article();
+        private Fonction fonction;
+        private Economique economique;
+        private Projet projet;
+        private Exercice exercice;
+        private Departement departement;
+        private String autres="";
+
+        Builder WithFonction(Fonction fonction)
+        {
+            this.fonction=fonction;
+            return this;
+        }
+
+        Builder WithEconomique(Economique economique)
+        {
+            this.economique=economique;
+            return this;
+        }
+
+        Builder WithProjet(Projet projet)
+        {
+            this.projet=projet;
+            return this;
+        }
+
+        Builder WithExercice(Exercice exercice)
+        {
+            this.exercice=exercice;
+            return this;
+        }
+
+        Builder WithDepartement(Departement departement)
+        {
+            this.departement = departement;
+            return this;
+        }
+        Article Build()
+        {
+            article.setFonction(this.fonction);
+            article.setDepartement(this.departement);
+            article.setEconomique(this.economique);
+            article.setProjet(this.projet);
+            article.setExercice(this.exercice);
+
+            return article;
+        }
+    }
 }
