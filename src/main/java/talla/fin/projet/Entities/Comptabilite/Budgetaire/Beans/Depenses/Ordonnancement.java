@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +19,8 @@ public class Ordonnancement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
-    private Imputation imputation;
+    @ManyToMany
+    private List<Imputation> imputation;
     private double montantOrdonnance=566777;
     private String College="31/12/2022";
 }

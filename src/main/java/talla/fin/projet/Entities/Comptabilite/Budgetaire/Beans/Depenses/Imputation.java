@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +21,9 @@ public class Imputation {
 
     @ManyToOne
     private Engagement engagement;
+
+    @ManyToMany (mappedBy = "imputation")
+    private List<Ordonnancement> ordonnancements;
     private double montantImput=9884;
     private double montantOrdonnance=546;
     private double montantLiquide=400;

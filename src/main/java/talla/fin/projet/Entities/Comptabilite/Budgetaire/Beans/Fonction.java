@@ -20,7 +20,7 @@ public class Fonction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String numFonction="000";
+    private String numfonction="000";
     private String Libelle="administration générale";
     private String departement="Departement général";
 }

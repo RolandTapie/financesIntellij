@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 @Entity
 public class Article {
@@ -26,8 +25,12 @@ public class Article {
     private Exercice exercice;
     @ManyToOne
     private Departement departement;
-    private String autres="";
+    private String art="";
 
+    public Article()
+    {
+
+    }
 
     public static class Builder
     {
@@ -80,8 +83,10 @@ public class Article {
             article.setEconomique(this.economique);
             article.setProjet(this.projet);
             article.setExercice(this.exercice);
-
+            article.setArt(article.getFonction().getNumfonction() +"/"+article.getEconomique().getEco() + "/" +article.getExercice().getNumeroExercice() +"/" +article.getProjet().getNumeroProjet());
             return article;
         }
     }
+
+
 }
