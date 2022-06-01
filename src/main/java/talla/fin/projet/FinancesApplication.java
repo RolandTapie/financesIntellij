@@ -6,13 +6,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import talla.fin.projet.Entities.Banques.Beans.Banque;
+import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.*;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Coda;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Compte;
 import talla.fin.projet.Repositories.Banques.BanqueRepository;
+import talla.fin.projet.Repositories.Comptabilite.Budgetaire.*;
 import talla.fin.projet.Repositories.Dette.*;
 import talla.fin.projet.Repositories.FluxFinanciers.CodaRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.CompteRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.SoldeRepository;
+import talla.fin.projet.Services.Comptabilite.Budgetaire.Implementations.ServiceArticle;
 import talla.fin.projet.Services.Dette.Services.LireInventaireDette;
 import talla.fin.projet.Services.FluxFinanciers.Services.LectureCoda;
 import talla.fin.projet.Services.Imports.XML.LectureXML;
@@ -24,7 +27,7 @@ public class FinancesApplication {
 		SpringApplication.run(FinancesApplication.class, args);
 	}
 
-	@Bean
+	//@Bean
 	CommandLineRunner debut(BanqueRepository banqueRepository,CommunRepository communRepository, SignaletiqueRepository signaletiqueRepository, EmpruntRepository empruntRepository, EcheanceRepository echeanceRepository, CoutRepository coutRepository, CompteRepository compteRepository, CodaRepository codaRepository, SoldeRepository soldeRepository)
 	{
 		return args -> {
@@ -74,5 +77,46 @@ public class FinancesApplication {
 			lecture = LectureXML.Execution();
 			System.out.println("Initialisation terminée");
 		};
+	}
+
+	@Bean
+	CommandLineRunner gestionArticle (ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, DepartementRepository departementRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository)
+	{
+		return args -> {
+
+			System.out.println("Initialisation traitement de l'article");
+			Fonction fonction = new Fonction();
+			fonctionRepository.save(fonction);
+			Economique 	economique = new Economique();
+			economiqueRepository.save(economique);
+			Departement departement = new Departement();
+			departementRepository.save(departement);
+			Projet projet = new Projet();
+			projetRepository.save(projet);
+			Exercice exercice = new Exercice();
+			exerciceRepository.save(exercice);
+
+			Article article = new Article();
+			article.setFonction(fonction);
+			article.setEconomique(economique);
+			article.setExercice(exercice);
+			article.setDepartement(departement);
+			article.setProjet(projet);
+
+			ServiceArticle serviceArticle = new ServiceArticle();
+			if (serviceArticle.ValidationArticle(article, fonctionRepository, economiqueRepository))
+			{
+				articleRepository.save(article);
+				System.out.println("Article " + article.toString() + " enregistré");
+			}
+			else
+			{
+				System.out.println("Article non enregistré");
+			}
+
+			System.out.println("Initialisation effectuée...");
+		};
+
+
 	}
 }
