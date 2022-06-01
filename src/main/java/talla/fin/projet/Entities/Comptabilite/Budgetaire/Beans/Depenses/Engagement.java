@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.Article;
 
 import javax.persistence.*;
 
@@ -19,8 +20,10 @@ public class Engagement {
     private int id;
 
     @ManyToOne
-    private FactureIn facture;
-    private String numArticle="6";
+    private FactureIn factureIn;
+
+    @ManyToOne
+    private Article article;
     private String libelle="Engagemende la depense";
     private double montantEng=1233444;
     private String statutEng="Definitif";
