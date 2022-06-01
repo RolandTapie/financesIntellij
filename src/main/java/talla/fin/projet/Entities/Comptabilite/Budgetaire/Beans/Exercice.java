@@ -21,5 +21,5 @@ public class Exercice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String numeroExercice="2022";
+    private String numeroexercice="2022";
 }

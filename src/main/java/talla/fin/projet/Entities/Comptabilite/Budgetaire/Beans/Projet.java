@@ -21,7 +21,7 @@ public class Projet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String numeroProjet="12345-678";
+    private String numeroprojet="12345-678";
     private String departement="Gesfin";
     private String etat="En cours d'execution"; // acceptée ou refusée
 }

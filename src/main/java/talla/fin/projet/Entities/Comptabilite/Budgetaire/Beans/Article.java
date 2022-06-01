@@ -25,7 +25,10 @@ public class Article {
     private Exercice exercice;
     @ManyToOne
     private Departement departement;
+
     private String art="";
+
+    private double allocation=0;
 
     public Article()
     {
@@ -83,7 +86,7 @@ public class Article {
             article.setEconomique(this.economique);
             article.setProjet(this.projet);
             article.setExercice(this.exercice);
-            article.setArt(article.getFonction().getNumfonction() +"/"+article.getEconomique().getEco() + "/" +article.getExercice().getNumeroExercice() +"/" +article.getProjet().getNumeroProjet());
+            article.setArt(article.getFonction().getNumfonction() +"/"+article.getEconomique().getEco() + "/" +article.getExercice().getNumeroexercice() +"/" +article.getProjet().getNumeroprojet());
             return article;
         }
     }
