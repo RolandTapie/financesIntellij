@@ -9,13 +9,15 @@ import talla.fin.projet.Entities.Banques.Beans.Banque;
 import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.*;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Coda;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Compte;
-import talla.fin.projet.Entities.Imports.Budgetaire.ImportFonction;
+import talla.fin.projet.Entities.Imports.Budgetaire.*;
+import talla.fin.projet.Entities.Imports.Tiers.ImportTiers;
 import talla.fin.projet.Repositories.Banques.BanqueRepository;
 import talla.fin.projet.Repositories.Comptabilite.Budgetaire.*;
 import talla.fin.projet.Repositories.Dette.*;
 import talla.fin.projet.Repositories.FluxFinanciers.CodaRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.CompteRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.SoldeRepository;
+import talla.fin.projet.Repositories.Tiers.TiersRepository;
 import talla.fin.projet.Services.Comptabilite.Budgetaire.Implementations.ServiceArticle;
 import talla.fin.projet.Services.Dette.Services.LireInventaireDette;
 import talla.fin.projet.Services.FluxFinanciers.Services.LectureCoda;
@@ -83,16 +85,12 @@ public class FinancesApplication {
 	}
 
 	@Bean
-	CommandLineRunner gestionArticle (ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, DepartementRepository departementRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository)
+	CommandLineRunner gestionArticle (EngagementRepository engagementRepository, TiersRepository tiersRepository, AllocationRepository allocationRepository, ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, DepartementRepository departementRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository)
 	{
 		return args -> {
-			System.out.println("Import du fichier de fonctions");
-			try {
-				ImportFonction.Execution(fonctionRepository);
-			} catch (FileNotFoundException f)
-			{
-				System.out.println("Fichier d'import de fonctions inexistant");
-			}
+
+			//Méthode d'import GLOBAL
+			Imports.execution(engagementRepository, tiersRepository, allocationRepository, fonctionRepository, economiqueRepository);
 
 			System.out.println("Initialisation traitement de l'article");
 			Fonction fonction = new Fonction();
@@ -130,4 +128,6 @@ public class FinancesApplication {
 
 
 	}
+
+
 }
