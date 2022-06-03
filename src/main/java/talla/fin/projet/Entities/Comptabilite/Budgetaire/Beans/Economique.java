@@ -20,8 +20,12 @@ public class Economique {
 
     private String eco="121-01";
     private String libelle="Test Code Eco";
+    private String groupe="";
     private String nature="Test nature";
+    private String type="";
     private String service="Ordinaire";
+    private String cgd="";
+    private String cgc="";
 
     @ManyToOne
     private CG cgDebit;

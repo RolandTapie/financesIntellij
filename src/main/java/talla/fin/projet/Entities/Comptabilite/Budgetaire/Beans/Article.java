@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 public class Article {
@@ -30,10 +31,6 @@ public class Article {
 
     private double allocation=0;
 
-    public Article()
-    {
-
-    }
 
     public static class Builder
     {
