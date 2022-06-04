@@ -5,13 +5,14 @@ import talla.fin.projet.Repositories.Comptabilite.Budgetaire.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public class ImportArticle {
 
     public static void Execution(ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository, DepartementRepository departementRepository) throws FileNotFoundException {
-        Fonction fonction;
-        Economique economique;
+        List<Fonction> fonction;
+        List<Economique> economique;
         Exercice exercice;
         Departement departement;
         Projet projet;
@@ -36,9 +37,9 @@ public class ImportArticle {
 
             Article article = new Article();
             fonction = fonctionRepository.findByNumfonction(lfonction);
-            article.setFonction(fonction);
+            //article.setFonction(fonction);
             economique = economiqueRepository.findByEco(leconomique);
-            article.setEconomique(economique);
+            //article.setEconomique(economique);
             exercice = exerciceRepository.findByNumeroexercice(lexercice);
             article.setExercice(exercice);
             projet = projetRepository.findByNumeroprojet(lprojet);

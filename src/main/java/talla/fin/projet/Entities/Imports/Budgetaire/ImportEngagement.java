@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class ImportEngagement {
 
-    public static void Execution(EngagementRepository engagementRepository) throws FileNotFoundException {
+    public static void Execution(String source,EngagementRepository engagementRepository) throws FileNotFoundException {
 
         FactureIn factureIn;
 
@@ -25,7 +25,7 @@ public class ImportEngagement {
          String college="89";
          double soldeEng=950;
 
-        Scanner scan = new Scanner(new File("src/main/java/talla/fin/projet/ZFiles/Engagements.txt"));
+        Scanner scan = new Scanner(new File(source +"Engagements.txt"));
 
 
         while (scan.hasNextLine()) {

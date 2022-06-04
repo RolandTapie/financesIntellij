@@ -9,12 +9,12 @@ import java.util.Scanner;
 
 public class ImportFonction {
 
-    public static void Execution( FonctionRepository fonctionRepositoryry) throws FileNotFoundException {
+    public static void Execution( String source, FonctionRepository fonctionRepositoryry) throws FileNotFoundException {
 
         String numfonction ="";
         String libelle="";
 
-        Scanner scan = new Scanner(new File("src/main/java/talla/fin/projet/ZFiles/Fonctions.txt"));
+        Scanner scan = new Scanner(new File(source + "Fonctions.txt"));
 
 
         while (scan.hasNextLine()) {

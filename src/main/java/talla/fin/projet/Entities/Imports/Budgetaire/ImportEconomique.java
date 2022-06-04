@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ImportEconomique {
-    public static void Execution(EconomiqueRepository economiqueRepository) throws FileNotFoundException {
+    public static void Execution(String source, EconomiqueRepository economiqueRepository) throws FileNotFoundException {
 
         String numeco ="";
         String libelle="";
@@ -20,7 +20,7 @@ public class ImportEconomique {
         String cgd="";
         String cgc="";
 
-        Scanner scan = new Scanner(new File("src/main/java/talla/fin/projet/ZFiles/Economiques.txt"));
+        Scanner scan = new Scanner(new File(source + "Economiques.txt"));
 
 
         while (scan.hasNextLine()) {

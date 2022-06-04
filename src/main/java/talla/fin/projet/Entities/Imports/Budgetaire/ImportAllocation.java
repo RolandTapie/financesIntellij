@@ -1,9 +1,15 @@
 package talla.fin.projet.Entities.Imports.Budgetaire;
 
 import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.Allocation;
+import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.Article;
 import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.Economique;
+import talla.fin.projet.Entities.Comptabilite.Budgetaire.Beans.Fonction;
+import talla.fin.projet.Exceptions.ArticleNonValideException;
 import talla.fin.projet.Repositories.Comptabilite.Budgetaire.AllocationRepository;
 import talla.fin.projet.Repositories.Comptabilite.Budgetaire.EconomiqueRepository;
+import talla.fin.projet.Repositories.Comptabilite.Budgetaire.FonctionRepository;
+import talla.fin.projet.Services.Comptabilite.Budgetaire.Implementations.ServiceArticle;
+import talla.fin.projet.Services.Comptabilite.Budgetaire.Interfaces.IFServiceArticle;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +17,7 @@ import java.util.Scanner;
 
 public class ImportAllocation {
 
-    public static void Execution(AllocationRepository allocationRepository) throws FileNotFoundException {
+    public static void Execution(String source, AllocationRepository allocationRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository) throws FileNotFoundException {
 
         String article ="";
         double initial=0;
@@ -20,7 +26,7 @@ public class ImportAllocation {
         String date="";
 
 
-        Scanner scan = new Scanner(new File("src/main/java/talla/fin/projet/ZFiles/Allocations.txt"));
+        Scanner scan = new Scanner(new File(source+"Allocations.txt"));
 
 
         while (scan.hasNextLine()) {
@@ -35,17 +41,34 @@ public class ImportAllocation {
 
 
             Allocation allocation= new Allocation();
+
             //TODO: Valider l'article
-            allocation.setArticle(article);
-            allocation.setInitial(initial);
-            allocation.setSolde(solde);
-            allocation.setCahier(cahier);
-            allocation.setDate(date);
+            IFServiceArticle serviceArticle = new ServiceArticle() {
+            };
+            Article article1 = serviceArticle.ConstitutionArticle(article);
 
-            //TODO: lier aux entités JPA
+            try {
+                Boolean test = serviceArticle.ValidationArticle(article1, fonctionRepository, economiqueRepository);
+                if (test==true)
+                {
+                    allocation.setArticle(article);
+                    allocation.setInitial(initial);
+                    allocation.setSolde(solde);
+                    allocation.setCahier(cahier);
+                    allocation.setDate(date);
+
+                    //TODO: lier aux entités JPA
+
+                    allocationRepository.save(allocation);
+                    System.out.println("Article enregistré : "+ article);
+                }
+            } catch (ArticleNonValideException anve)
+            {
+                System.out.println(anve.getMessage());
+                System.out.println("Article non valide : "+ article);
+            }
 
 
-            allocationRepository.save(allocation);
 
         }
     }

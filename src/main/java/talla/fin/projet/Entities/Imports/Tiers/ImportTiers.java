@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class ImportTiers {
 
-    public static void Execution(TiersRepository tiersRepository) throws FileNotFoundException {
+    public static void Execution(String source,TiersRepository tiersRepository) throws FileNotFoundException {
 
          String numeroTiers="9377747474747"; //BCE, NN
          String type="Personne Physique";//PP, PM etc.
@@ -29,7 +29,7 @@ public class ImportTiers {
          String compte="77";
 
 
-        Scanner scan = new Scanner(new File("src/main/java/talla/fin/projet/ZFiles/Tiers.txt"));
+        Scanner scan = new Scanner(new File(source+"Tiers.txt"));
 
         int i =0;
         while (scan.hasNextLine()) {
