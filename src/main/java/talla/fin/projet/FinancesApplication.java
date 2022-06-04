@@ -33,11 +33,18 @@ public class FinancesApplication {
 		SpringApplication.run(FinancesApplication.class, args);
 	}
 
-	//@Bean
-	CommandLineRunner debut(BanqueRepository banqueRepository,CommunRepository communRepository, SignaletiqueRepository signaletiqueRepository, EmpruntRepository empruntRepository, EcheanceRepository echeanceRepository, CoutRepository coutRepository, CompteRepository compteRepository, CodaRepository codaRepository, SoldeRepository soldeRepository)
+	@Bean
+	CommandLineRunner debut()
 	{
 		return args -> {
-//
+			System.out.println("*********************Initilisation application: DEBUT *******************");
+		};
+	}
+	@Bean
+	CommandLineRunner partieI(BanqueRepository banqueRepository,CommunRepository communRepository, SignaletiqueRepository signaletiqueRepository, EmpruntRepository empruntRepository, EcheanceRepository echeanceRepository, CoutRepository coutRepository, CompteRepository compteRepository, CodaRepository codaRepository, SoldeRepository soldeRepository)
+	{
+		return args -> {
+			System.out.println("A-Bean: partieI");
 //			Banque banque1 = new Banque();
 //			banque1.setNom("ING");
 //			banque1.setAdresse("Adresse ING");
@@ -49,6 +56,8 @@ public class FinancesApplication {
 //			banque1.setNumentreprise("Num entreprise Belfius");
 //			banqueRepository.save(banque2);
 
+			System.out.println("1-Lecture des fichiers CODA");
+
 			LectureCoda lectureCoda = new LectureCoda(compteRepository);
 			lectureCoda.ControleEtImport();
 			lectureCoda.getListe().forEach(c -> {
@@ -58,42 +67,44 @@ public class FinancesApplication {
 				soldeRepository.save(s);
 			});
 
+			System.out.println("2-Lecture des Inventaires Dettes");
 			LireInventaireDette lireInventaireDette = new LireInventaireDette();
 			lireInventaireDette.execution(banqueRepository);
 
-			System.out.println("Sauvegarde des données communes...");
+			System.out.println("   > Sauvegarde des données communes...");
 			lireInventaireDette.getListeCom().forEach(commun -> {
 				communRepository.save(commun);
 			});
-			System.out.println("Sauvegarde des signalétiques...");
+			System.out.println("   > Sauvegarde des signalétiques...");
 			lireInventaireDette.getListeSign().forEach(signaletique -> {
 				signaletiqueRepository.save(signaletique);
 			});
-			System.out.println("Sauvegarde des échéances...");
+			System.out.println("   > Sauvegarde des échéances...");
 			lireInventaireDette.getListeEch().forEach(echeance -> {
 				echeanceRepository.save(echeance);
 			});
-			System.out.println("Sauvegarde des échéances : coût...");
+			System.out.println("   > Sauvegarde des échéances : coût...");
 			lireInventaireDette.getListecout().forEach(cout -> {
 				coutRepository.save(cout);
 			});
 
-			System.out.println("Lecture XML");
+			System.out.println("3-Lecture des fichiers XML");
+			System.out.println("  > Lecture des OP format XML");
 			String lecture="";
 			lecture = LectureXML.Execution();
-			System.out.println("Initialisation terminée");
+			//System.out.println("Initialisation terminée");
 		};
 	}
 
 	@Bean
-	CommandLineRunner gestionArticle (CGRepository cgRepository,EngagementRepository engagementRepository, TiersRepository tiersRepository, AllocationRepository allocationRepository, ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, DepartementRepository departementRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository)
+	CommandLineRunner partieII (CGRepository cgRepository,EngagementRepository engagementRepository, TiersRepository tiersRepository, AllocationRepository allocationRepository, ArticleRepository articleRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository, DepartementRepository departementRepository, ExerciceRepository exerciceRepository, ProjetRepository projetRepository)
 	{
 		return args -> {
-
-			//Méthode d'import GLOBAL
+			System.out.println("B-Bean: partieII");
+			System.out.println("4-Imports des données de Comptabilité");
 			Imports.execution(cgRepository,engagementRepository, tiersRepository, allocationRepository, fonctionRepository, economiqueRepository);
 
-			System.out.println("Initialisation traitement de l'article");
+			/*System.out.println("Initialisation traitement de l'article");
 			Fonction fonction = new Fonction();
 			fonctionRepository.save(fonction);
 			Economique 	economique = new Economique();
@@ -122,7 +133,7 @@ public class FinancesApplication {
 			else
 			{
 				System.out.println("Article non enregistré");
-			}
+			}*/
 
 			System.out.println("Initialisation effectuée...");
 		};
@@ -130,5 +141,11 @@ public class FinancesApplication {
 
 	}
 
-
+	@Bean
+	CommandLineRunner fin()
+	{
+		return args -> {
+			System.out.println("*********************Initilisation application: FIN  *******************");
+		};
+	}
 }

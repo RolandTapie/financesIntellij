@@ -78,7 +78,7 @@ public class ImportTiers {
             }
             else
             {
-                System.out.println(i + " : taille du tableau inférieur à 14");
+                //System.out.println(i + " : taille du tableau inférieur à 14");
             }
 
 

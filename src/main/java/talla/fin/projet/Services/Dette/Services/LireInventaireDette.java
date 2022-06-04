@@ -350,9 +350,9 @@ public class LireInventaireDette {
             }
         }
 
-        System.out.println ("taille de la liste" + listeEch.size() + " nombre de lignes 7: " + nb_file );
+        System.out.println ("  > taille de la liste" + listeEch.size() + " nombre de lignes 7: " + nb_file );
         System.out.println("");
-        System.out.println("Injection des informations dettes dans la base de données...");
+        System.out.println("  > Injection des informations dettes dans la base de données...");
 
     }
 

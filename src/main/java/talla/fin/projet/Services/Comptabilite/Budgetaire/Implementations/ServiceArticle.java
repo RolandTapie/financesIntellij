@@ -27,7 +27,6 @@ public class ServiceArticle implements IFServiceArticle {
 
         Fonction fonction = null;
         if (fonctionRepository.findByNumfonction(numfon).iterator().hasNext()) {
-            System.out.println(fonctionRepository.findByNumfonction(numfon).size());
             fonction=(fonctionRepository.findByNumfonction(numfon)).iterator().next();
         }
         Economique economique=null;

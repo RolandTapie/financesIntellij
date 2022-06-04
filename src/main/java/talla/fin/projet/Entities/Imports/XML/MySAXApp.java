@@ -74,11 +74,11 @@ public class MySAXApp extends DefaultHandler {
     }
 
     public void startDocument() {
-        System.out.println("Start document");
+
     }
 
     public void endDocument() {
-        System.out.println("End document");
+
     }
 
     @Override

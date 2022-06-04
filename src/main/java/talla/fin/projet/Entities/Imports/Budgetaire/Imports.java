@@ -17,7 +17,7 @@ public class Imports {
     
     public static void execution(CGRepository cgRepository,EngagementRepository engagementRepository, TiersRepository tiersRepository, AllocationRepository allocationRepository, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository) {
 
-        System.out.println("Import du fichier de Fonctions");
+        System.out.println("  > Import du fichier de Fonctions");
         try {
             ImportFonction.Execution(source, fonctionRepository);
         } catch (FileNotFoundException f)
@@ -25,7 +25,7 @@ public class Imports {
             System.out.println("Fichier d'import de fonctions inexistant");
         }
 
-        System.out.println("Import du fichier de CG");
+        System.out.println("  > Import du fichier de CG");
         try {
             ImportCG.Execution(source, cgRepository);
         } catch (FileNotFoundException f)
@@ -33,7 +33,7 @@ public class Imports {
             System.out.println("Fichier d'import de CG inexistant");
         }
 
-        System.out.println("Import du fichier de Economiques");
+        System.out.println("  > Import du fichier de Economiques");
         try {
             ImportEconomique.Execution(source, economiqueRepository);
         } catch (FileNotFoundException f)
@@ -41,14 +41,15 @@ public class Imports {
             System.out.println("Fichier d'import de fonctions inexistant");
         }
 
-        System.out.println("Import du fichier de Allocations");
+        System.out.println("  > Import du fichier de Allocations");
+        System.out.println("  > Validation des articles necessaire à l'import des allocations");
         try {
             ImportAllocation.Execution(source,allocationRepository,fonctionRepository, economiqueRepository);
         } catch (FileNotFoundException f)
         {
             System.out.println("Fichier d'import de Allocations inexistant");
         }
-        System.out.println("Import du fichier de Tiers");
+        System.out.println("  > Import du fichier de Tiers");
         try {
             ImportTiers.Execution(source,tiersRepository);
         } catch (FileNotFoundException f)
@@ -56,7 +57,7 @@ public class Imports {
             System.out.println("Fichier d'import de fonctions inexistant");
         }
 
-        System.out.println("Import du fichier de Engagements");
+        System.out.println("  > Import du fichier de Engagements");
         try {
             ImportEngagement.Execution(source,engagementRepository);
         } catch (FileNotFoundException f)

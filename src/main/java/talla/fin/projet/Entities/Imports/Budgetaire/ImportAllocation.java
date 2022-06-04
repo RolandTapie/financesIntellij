@@ -28,6 +28,8 @@ public class ImportAllocation {
 
         Scanner scan = new Scanner(new File(source+"Allocations.txt"));
 
+        int ok=0;
+        int nonOK=0;
 
         while (scan.hasNextLine()) {
             String ligne=scan.nextLine();
@@ -60,16 +62,20 @@ public class ImportAllocation {
                     //TODO: lier aux entités JPA
 
                     allocationRepository.save(allocation);
-                    System.out.println("Article enregistré : "+ article);
+                    ok++;
+                    //System.out.println("Article enregistré : "+ article);
                 }
             } catch (ArticleNonValideException anve)
             {
-                System.out.println(anve.getMessage());
-                System.out.println("Article non valide : "+ article);
+                nonOK++;
+                //System.out.println(anve.getMessage());
+                //System.out.println("Article non valide : "+ article);
             }
 
 
 
         }
+        System.out.println("   > "+ ok + " articles conformes et allocations enregistrées");
+        System.out.println("   > "+ nonOK + " articles NON conformes ; enregistrements impossibles");
     }
 }

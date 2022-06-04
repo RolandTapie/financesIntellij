@@ -34,14 +34,14 @@ public class LectureXML {
             if ((files[i].getName().indexOf(".xml") > 0) && i < files.length) //On teste s'il existe un fichier CODA
             {
                 nbFichier++;
-                System.out.println(files[i].getAbsolutePath());
+                System.out.println("  > "+files[i].getAbsolutePath());
                 handler.setNomFichier(files[i].getName());
                 xr.parse(files[i].getAbsolutePath());
             }
 
         }
 
-        System.out.println("Nombre de fichiers traités :" + nbFichier);
+        System.out.println("  > Nombre de fichiers traités :" + nbFichier);
 
         return "Import OK";
     }

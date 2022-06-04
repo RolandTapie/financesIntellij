@@ -60,7 +60,7 @@ public class LectureCoda {
     }
 
     public  void ControleEtImport(){
-        System.out.println("Contrôle existence des Fichiers Coda");
+        System.out.println("  > Contrôle existence des Fichiers Coda");
         String chemin = "C:\\Users\\Liege\\Downloads\\coda 2020 et 2021" ;
         File path = new File(chemin); //Définition chemin de base vers les fichier CODA
         File [] files = path.listFiles(); //Création d'un tableau de fichier pour stocker la liste des fichier du répertoire
@@ -89,7 +89,7 @@ public class LectureCoda {
 
 
         // TODO Auto-generated constructor stub
-        System.out.println("Import des fichiers Coda");
+        System.out.println("  > Import des fichiers Coda");
         int nb_ligne =0; //Compteur nombre de lignes
         int nb_file =0; //Compteur nombre de fichiers
         boolean nouveau=false;
@@ -304,7 +304,7 @@ public class LectureCoda {
 
                             if (nb_ligne==345)
                             {
-                                System.out.println("ok");
+                                //System.out.println("ok");
                             }
 
                             //En fonction du type de lignes on sauvegarde les données génériques
@@ -366,13 +366,13 @@ public class LectureCoda {
 
             }
 
-            System.out.println("Nombre de fichiers traités :" + nb_file + " de type 21 :" + liste.size());
+            System.out.println("  > Nombre de fichiers traités :" + nb_file + " de type 21 :" + liste.size());
 
-            System.out.println("Nombre de ligne de fichiers CODA :" + nb_ligne + " et enregistrements: " + w);
+            System.out.println("  > Nombre de ligne de fichiers CODA :" + nb_ligne + " et enregistrements: " + w);
 
             //nombreLigne=nombreLigne+nb_ligne;
 
-            System.out.println("Liste des fichiers " + (k) +" traités à déplacer");
+            System.out.println("  > Liste des fichiers " + (k) +" traités à déplacer");
 
             //Déplacement des fichiers traités
             for (int j=0; j<k ; j++)
