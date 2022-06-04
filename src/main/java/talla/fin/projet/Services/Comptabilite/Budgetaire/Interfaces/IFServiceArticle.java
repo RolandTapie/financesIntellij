@@ -7,5 +7,6 @@ import talla.fin.projet.Repositories.Comptabilite.Budgetaire.FonctionRepository;
 
 public interface IFServiceArticle {
 
-    Boolean ValidationArticle(Article article, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository) throws ArticleNonValideException;
+     Boolean ValidationArticle(Article article, FonctionRepository fonctionRepository, EconomiqueRepository economiqueRepository) throws ArticleNonValideException;
+    Article ConstitutionArticle(String article);
 }
