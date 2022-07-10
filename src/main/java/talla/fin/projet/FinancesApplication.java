@@ -59,7 +59,7 @@ public class FinancesApplication {
 			System.out.println("1-Lecture des fichiers CODA");
 
 			LectureCoda lectureCoda = new LectureCoda(compteRepository);
-			lectureCoda.ControleEtImport();
+			lectureCoda.ControleEtImport("C:\\Users\\Liege\\Downloads\\coda 2020 et 2021");
 			lectureCoda.getListe().forEach(c -> {
 				codaRepository.save(c);
 			});

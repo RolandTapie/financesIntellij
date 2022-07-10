@@ -1,12 +1,15 @@
 package talla.fin.projet.Services.FluxFinanciers.Services;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Coda;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Compte;
 import talla.fin.projet.Entities.FluxFinanciers.Beans.Solde;
+import talla.fin.projet.Repositories.FluxFinanciers.CodaRepository;
 import talla.fin.projet.Repositories.FluxFinanciers.CompteRepository;
+import talla.fin.projet.Services.FluxFinanciers.Interfaces.ILectureCoda;
 
 import java.io.*;
 import java.text.ParseException;
@@ -16,18 +19,27 @@ import java.util.Iterator;
 import java.util.List;
 
 @NoArgsConstructor
-@AllArgsConstructor
-public class LectureCoda {
+@Data
+public class LectureCoda implements ILectureCoda {
 
     public CompteRepository compteRepository;
+    public CodaRepository codaRepository;
+
+    public LectureCoda(CompteRepository compteRepository, CodaRepository codaRepository) {
+        this.compteRepository = compteRepository;
+        this.codaRepository = codaRepository;
+    }
 
     private int nbligne=0;
+    private double amount=0;
     private static List<Coda> liste= new ArrayList();
     private static List<Compte> listeCompte = new ArrayList();
 
     public LectureCoda(CompteRepository compteRepository) {
         this.compteRepository = compteRepository;
     }
+
+
 
     public static List<Compte> getListeCompte() {
         return listeCompte;
@@ -59,10 +71,11 @@ public class LectureCoda {
         this.listesolde = listesolde;
     }
 
-    public  void ControleEtImport(){
+    public  void ControleEtImport(String cheminCoda){
         System.out.println("  > Contrôle existence des Fichiers Coda");
-        String chemin = "C:\\Users\\Liege\\Downloads\\coda 2020 et 2021" ;
-        File path = new File(chemin); //Définition chemin de base vers les fichier CODA
+        //String chemin = "C:\\Users\\Liege\\Downloads\\coda 2020 et 2021" ;
+        String chemin = cheminCoda;
+                File path = new File(chemin); //Définition chemin de base vers les fichier CODA
         File [] files = path.listFiles(); //Création d'un tableau de fichier pour stocker la liste des fichier du répertoire
 
         // On revient voir dans le repertoire s'il existe encore des fichiers CODA
@@ -76,7 +89,7 @@ public class LectureCoda {
 
             if ((files[i].getName().indexOf(".CD2") > 0) && i < files.length) //On teste s'il existe un fichier CODA
             {
-                ImportCoda(compteRepository);
+                ImportCoda(chemin);
                 break controle;
             }
 
@@ -84,7 +97,7 @@ public class LectureCoda {
 
     }
 
-    private  void ImportCoda(CompteRepository compteRepository)
+    public  void ImportCoda(String cheminCoda)
     {
 
 
@@ -216,16 +229,25 @@ public class LectureCoda {
                             Compte cpte= new Compte();
                             List<Compte> compteList = new ArrayList();
                             compteList=compteRepository.findByCompte(compte);
-                            Iterator<Compte>  compteIterator = compteList.iterator();
-                            if (compteIterator.hasNext())
-                            {
-                                cpte=compteIterator.next();
-                            }
-                            else
-                            {
+
+                            if (compteList==null) {
                                 cpte.setCompte(compte);
                                 compteRepository.save(cpte);
                             }
+                                else{
+                                Iterator<Compte>  compteIterator = compteList.iterator();
+                                if (compteIterator.hasNext())
+                                {
+                                    cpte=compteIterator.next();
+                                }
+                                else
+                                {
+                                    cpte.setCompte(compte);
+                                    compteRepository.save(cpte);
+                                }
+
+                            }
+
 
                             cod2.setCompte(cpte);
                             solde.setCompte(cpte);
@@ -252,11 +274,13 @@ public class LectureCoda {
                             if (cod2.getMouvement().equals("Dépense"))
                             {
                                 cod2.setMontantflux((-1)*Double.parseDouble(line.substring(32, 47))/1000);
+                                this.amount=this.amount+cod2.getMontantflux();
                                 cod2.setSolde(cod2.getMontantflux());
                             }
                             else
                             {
                                 cod2.setMontantflux(Double.parseDouble(line.substring(32, 47))/1000);
+                                this.amount=this.amount+cod2.getMontantflux();
                                 cod2.setSolde(cod2.getMontantflux());
                             }
 
@@ -366,6 +390,8 @@ public class LectureCoda {
 
             }
 
+            this.nbligne=nb_ligne;
+
             System.out.println("  > Nombre de fichiers traités :" + nb_file + " de type 21 :" + liste.size());
 
             System.out.println("  > Nombre de ligne de fichiers CODA :" + nb_ligne + " et enregistrements: " + w);
@@ -380,7 +406,7 @@ public class LectureCoda {
                 File fichier = new File(traites[j]);
                 File dest = new File(fichier.getParent()+"/Traite/"+fichier.getName());
                 //OK System.out.println(Paths.get(traites[j]) + " > " + dest);
-                if (fichier.renameTo(dest))
+               // if (fichier.renameTo(dest))
                 {
                     // System.out.println("Déplacement effectué");
                 }
@@ -391,5 +417,10 @@ public class LectureCoda {
         {
             e.printStackTrace();
         }
+    }
+
+    public void sauvegarde()
+    {
+        this.getListe().forEach(coda -> codaRepository.save(coda));
     }
 }
